@@ -15,8 +15,16 @@ include(ElementsConfigCommon)
 
 option(ELEMENTS_BUILD_EXAMPLES "build Elements library examples" ON)
 option(ELEMENTS_ENABLE_LTO "enable link time optimization for Elements targets" OFF)
-set(ELEMENTS_HOST_UI_LIBRARY "" CACHE STRING "gtk, cocoa or win32")
+set(ELEMENTS_HOST_UI_LIBRARY "" CACHE STRING "sdl,gtk, cocoa or win32")
 option(ELEMENTS_HOST_ONLY_WIN7 "If host UI library is win32, reduce elements features to support Windows 7" OFF)
+
+option(ELEMENTS_BUILD_SDL "build Elements library examples" ON)
+
+if(ELEMENTS_BUILD_SDL)
+   add_subdirectory(lib/external/sdl)
+   include_directories(lib/external/sdl/include)
+   set(ELEMENTS_HOST_UI_LIBRARY "sdl")
+endif()
 
 add_subdirectory(lib)
 

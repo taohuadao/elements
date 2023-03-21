@@ -277,12 +277,14 @@ namespace cycfi { namespace elements
    ////////////////////////////////////////////////////////////////////////////
    // The base view base class
    ////////////////////////////////////////////////////////////////////////////
-
-#if defined(ELEMENTS_HOST_UI_LIBRARY_COCOA) || defined(ELEMENTS_HOST_UI_LIBRARY_GTK)
-   struct host_view;
-   using host_view_handle = host_view*;
-   struct host_window;
-   using host_window_handle = host_window*;
+#if defined(ELEMENTS_HOST_UI_LIBRARY_SDL)
+    using host_view_handle = void*;
+    using host_window_handle = void*;
+#elif defined(ELEMENTS_HOST_UI_LIBRARY_COCOA) || defined(ELEMENTS_HOST_UI_LIBRARY_GTK)
+    struct host_view;
+    using host_view_handle = host_view*;
+    struct host_window;
+    using host_window_handle = host_window*;
 #elif defined(ELEMENTS_HOST_UI_LIBRARY_WIN32)
    using host_view_handle = HWND;
    using host_window_handle = HWND;

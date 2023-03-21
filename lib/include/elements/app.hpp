@@ -34,7 +34,9 @@ namespace cycfi { namespace elements
 
    private:
 
-#if defined(ELEMENTS_HOST_UI_LIBRARY_COCOA)
+#if defined(ELEMENTS_HOST_UI_LIBRARY_SDL)
+    bool  _running = true;
+#elif defined(ELEMENTS_HOST_UI_LIBRARY_COCOA)
       void* _menubar;
 #elif defined(ELEMENTS_HOST_UI_LIBRARY_GTK)
       GtkApplication* _app;

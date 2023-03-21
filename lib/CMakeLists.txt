@@ -54,6 +54,8 @@ set(ELEMENTS_SOURCES
    src/view.cpp
 )
 
+
+
 set(ELEMENTS_HEADERS
    include/elements.hpp
    include/elements/app.hpp
@@ -123,8 +125,14 @@ set(ELEMENTS_HEADERS
    include/elements/view.hpp
    include/elements/window.hpp
 )
-
-if (APPLE)
+if(ELEMENTS_BUILD_SDL)
+    set(ELEMENTS_HOST
+            host/sdl/app.cpp
+            host/sdl/base_view.cpp
+            host/sdl/key.cpp
+            host/sdl/window.cpp
+            )
+elseif (APPLE)
    set(ELEMENTS_HOST
       host/macos/app.mm
       host/macos/base_view.mm
@@ -307,8 +315,9 @@ elseif (WIN32)
       BOOST_REGEX_NO_LIB
    )
 endif()
-
-if(ELEMENTS_HOST_UI_LIBRARY STREQUAL "gtk")
+if(ELEMENTS_HOST_UI_LIBRARY STREQUAL "sdl")
+    target_compile_definitions(elements PUBLIC ELEMENTS_HOST_UI_LIBRARY_SDL)
+elseif(ELEMENTS_HOST_UI_LIBRARY STREQUAL "gtk")
     target_compile_definitions(elements PUBLIC ELEMENTS_HOST_UI_LIBRARY_GTK)
 elseif(ELEMENTS_HOST_UI_LIBRARY STREQUAL "cocoa")
     if(NOT APPLE)
@@ -329,7 +338,7 @@ elseif(ELEMENTS_HOST_UI_LIBRARY STREQUAL "win32")
         target_compile_definitions(elements PRIVATE _WIN32_WINNT=0x0A00)
     endif()
 else()
-    message(FATAL_ERROR "Invalid ELEMENTS_HOST_UI_LIBRARY=${ELEMENTS_HOST_UI_LIBRARY}. Set gtk, cocoa or win32.")
+    message(FATAL_ERROR "Invalid ELEMENTS_HOST_UI_LIBRARY=${ELEMENTS_HOST_UI_LIBRARY}. Set sdl, gtk, cocoa or win32.")
 endif()
 
 ###############################################################################
@@ -349,5 +358,7 @@ endif()
 if (WIN32)
    target_link_libraries(elements PUBLIC Shcore)
 endif()
-
+if(ELEMENTS_BUILD_SDL)
+target_link_libraries(elements PUBLIC SDL3-static)
+endif()
 add_library(cycfi::elements ALIAS elements)
